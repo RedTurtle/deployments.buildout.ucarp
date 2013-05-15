@@ -17,22 +17,35 @@ RedHat/CentOS::
 Minimal configuration
 ---------------------
 
-On your master node:
+On your master node extend/edit master.cfg to specify:
+    - ucarp.conf:vip_address
+    - ucarp.conf:source_address (current node physical ip)
 
-    * extend/edit master.cfg to specify:
+On your backup node, extend/edit backup.cfg to specify:
+    - ucarp.conf:vip_address
+    - ucarp.conf:source_address (current node physical ip)
 
-        - ucarp.conf:vip_address
-        - ucarp.conf:source_address (current node physical ip)
 
-On your backup node:
+Your master node buildout.cfg will look like::
 
-    * extend/edit backup.cfg to specify:
+    [buildout]
+    extends=master.cfg
 
-        - ucarp.conf:vip_address
-        - ucarp.conf:source_address (current node physical ip)
+    [ucarp.conf]
+    source_address=10.0.1.1
+    vip_address=10.0.1.3
 
-Many parameters can be modified, check base.cfg and the template you want to
-use.
+While your backup node the buildout.cfg will look like::
+
+    [buildout]
+    extends=backup.cfg
+
+    [ucarp.conf]
+    source_address=10.0.1.2
+    vip_address=10.0.1.3
+
+Many other parameters can be modified,
+check base.cfg and the template you want to use.
 
 **RedHat/CentOS** users may want to modify builoudt:parts
 to use **ucarp.redhat.conf**.
