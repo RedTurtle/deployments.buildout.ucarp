@@ -1,0 +1,31 @@
+# This is a buildout generated file, do not edit directly.
+# Edit instead:
+#  ${:input}
+#
+# Virtual IP configuration file for UCARP
+# CentOS version
+# The number (from 001 to 255) in the name of the file is the identifier
+# cluster id (the same in both nodes)
+ID=${:uid}
+
+# In the simple scenario, you want a single virtual IP address from the _same_
+# network to be taken over by one of the routers.
+VIP_ADDRESS="${:vip_address}"
+
+# network interface
+BIND_INTERFACE=eth0
+# password (the same in both nodes)
+PASSWORD="${:password}"
+# my real ip
+SOURCE_ADDRESS="${:source_address}"
+
+# upscript
+UPSCRIPT="${vip-up:output}"
+# downscript
+DOWNSCRIPT="${vip-down:output}"
+
+OPTIONS="--shutdown --preempt --nomcast"
+
+# ucarp skew, lower number will be prefered master
+# (it is additive with UCARP_BASE)
+UCARP_SKEW=${:skew}

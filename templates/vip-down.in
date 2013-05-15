@@ -1,0 +1,7 @@
+#!/bin/sh
+# This is a buildout generated file, do not edit directly.
+# Edit instead:
+#  ${:input}
+exec 2>/dev/null
+
+/sbin/ip address del "$2"/32 dev "$1"
