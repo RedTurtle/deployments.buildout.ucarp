@@ -10,22 +10,22 @@
 #              It should be copied/symlinked in /etc/init.d and activated
 #              Edit instead: ${:input}
 #              using the update-rc.d script:
-#              cp ${initscript:output} /etc/init.d/${initscript:name}
-#              update-rc.d ${initscript:name} defaults
+#                cp ${:output} /etc/init.d/${:_buildout_section_name_}
+#                update-rc.d ${:_buildout_section_name_} defaults
 ### END INIT INFO
 
 # The Application Address that will failover
-VIRTUAL_ADDRESS=${:vip_address}
+VIRTUAL_ADDRESS=${ucarp.conf:vip_address}
 #VIRTUAL_BROADCAST=<broadcast_ip>
 #VIRTUAL_NETMASK=255.255.255.0
 
 # The Maintanence Address of the local machine
-SOURCE_ADDRESS=${:source_address}
+SOURCE_ADDRESS=${ucarp.conf:source_address}
 
 # Instance id
 # any number from 1 to 255
 # Master and Backup need to be the same
-INSTANCE_ID=${:uid}
+INSTANCE_ID=${ucarp.conf:uid}
 
 # Location of the ucarp executable
 UCARP_EXEC=/usr/sbin/ucarp
@@ -38,23 +38,23 @@ UCARP_PIDFILE=/var/run/ucarp.pid
 # -z run shudown script on exit
 # -P force perferred master
 # -B run in backgroud (DO NOT USE, it will change the pid (+1))
-OPTIONS="{:options}"
+OPTIONS="${ucarp.conf:options}"
 
 # ucarp base, lower number will be perfered master
 # set to same to have master stay alive as long as possible
 UCARP_BASE=1
 
-# ucarp skew, lower number will be perfered master (it is additive with UCARP_BASE)
-UCARP_SKEW=${:skew}
+# ucarp skew, lower number will be prefered master (it is additive with UCARP_BASE)
+UCARP_SKEW=${ucarp.conf:skew}
 
 # ucarp deadratio, number of sampling times to consider the daemon as dead
 UCARP_DEADRATIO=4
 
 # Interface for Ipaddress
-INTERFACE=eth0
+INTERFACE=${ucarp.conf:interface}
 
 # Password so servers can trust who they are talking to
-PASSWORD=${:password}
+PASSWORD=${ucarp.conf:password}
 
 # The start and stop scripts
 START_SCRIPT=${vip-up:output}
@@ -69,12 +69,12 @@ UCARP_OPTS="$OPTIONS --advbase=$UCARP_BASE --advskew=$UCARP_SKEW --deadratio=$UC
 case "$1" in
 start)
   echo "Starting UCARP"
-  start-stop-daemon --start --background --make-pidfile --pidfile ${UCARP_PIDFILE} --quiet --startas ${UCARP_EXEC} -- ${UCARP_OPTS}
+  start-stop-daemon --start --background --make-pidfile --pidfile $UCARP_PIDFILE --quiet --startas $UCARP_EXEC -- $UCARP_OPTS
   echo "... done"
   ;;
 stop)
   echo "Stopping UCARP"
-  start-stop-daemon --stop --pidfile ${UCARP_PIDFILE}
+  start-stop-daemon --stop --pidfile $UCARP_PIDFILE
   echo "... done"
   ;;
 *)
